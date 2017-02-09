@@ -162,4 +162,25 @@ class SyntaxSuite extends FunSuite{
     assert(res == 2)
   }
 
+
+  test("Pattern matching"){
+    case class Profesor(nombre:String)
+    case class Curso(nombre:String, p:Profesor)
+
+    val c1 = Curso("Scala", Profesor("JP"))
+
+    c1 match {
+      case x:Curso if x.p.nombre != "JP"=> {
+        assert(x.nombre=="Scala")
+        assert(x.p==Profesor("JP"))
+      }
+      case Curso(n,p) if p.nombre == "JP" => {
+        println("Pasa?")
+        assert(n=="Scala")
+        assert(p==Profesor("JP"))
+      }
+    }
+
+  }
+
 }
