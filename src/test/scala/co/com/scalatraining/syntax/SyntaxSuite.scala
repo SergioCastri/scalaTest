@@ -34,7 +34,7 @@ class SyntaxSuite extends FunSuite{
   }
 
   test("Scala no debe permitir iniciar en null"){
-    var x= null
+    var x: Null = null
     assertDoesNotCompile("x = 1")
   }
 
@@ -97,6 +97,9 @@ class SyntaxSuite extends FunSuite{
 
     // A una class se le debe instanciar con new pasándole los atributos que define para su construccion
     val mc = new MyClass(1)
+
+    println(s"mc: ${mc}")
+
     assert(mc.r == 0)
     val res1 = mc.f1
     assert(mc.r == 2)
@@ -116,6 +119,8 @@ class SyntaxSuite extends FunSuite{
 
     // Se puede instanciar sin new
     val mcc2 = MyCaseClass(1,2)
+    println(s"mcc: ${mcc2}")
+
     assert(mcc2.f1(1) == 2)
 
     //Que pasa si intentamos println(mcc2) ?

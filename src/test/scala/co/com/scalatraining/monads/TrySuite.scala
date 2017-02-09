@@ -59,6 +59,10 @@ class TrySuite extends FunSuite with Matchers {
       assert(ss == "HOLA")
     }
 
+    assert(res == Try("HOLA"))
+    assert(res == Success("HOLA"))
+
+
   }
 
   test("Un Success se debe poder map [assert con flatmap]"){
@@ -75,6 +79,8 @@ class TrySuite extends FunSuite with Matchers {
                 "HOLA ME HE RECUPERADO"
               }}
 
+
+    assert(res == Success("HOLA ME HE RECUPERADO"))
     res.flatMap(s => Try(assert(s == "HOLA ME HE RECUPERADO")) )
 
   }

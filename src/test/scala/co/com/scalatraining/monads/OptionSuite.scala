@@ -29,11 +29,23 @@ class OptionSuite extends FunSuite {
     val lista = List(Some("Andres"), None, Some("Luis"), Some("Pedro"))
     val nombre = lista(1)
     var res = ""
-    nombre match {
-      case Some(nom) => res = nom
-      case None => res = "NONAME"
+    res = nombre match {
+      case Some(nom) => nom
+      case None => "NONAME"
     }
     assert(res == "NONAME")
+  }
+
+  test("Fold en Option"){
+    val o = Option(1)
+
+    val res: Int = o.fold{
+      10
+    }{
+      x => x + 20
+    }
+
+    assert(res == 21)
   }
 
   test("Se debe poder saber si un Option tiene valor con isDefined") {
@@ -52,7 +64,7 @@ class OptionSuite extends FunSuite {
   test("Un Option se debe poder transformar con un map") {
     val lista = List(Some("Andres"), None, Some("Luis"), Some("Pedro"))
     val nombre = lista(0)
-    val nombreCompleto = nombre.map(s => s + " Felipe")
+    val nombreCompleto: Option[String] = nombre.map(s => s + " Felipe")
     assert(nombreCompleto.getOrElse("NONAME") == "Andres Felipe")
   }
 

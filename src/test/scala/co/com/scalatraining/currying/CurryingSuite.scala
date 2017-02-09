@@ -13,10 +13,10 @@ class CurryingSuite extends FunSuite with Matchers{
     //La evaluación de f con uno de sus parámetros retorna
     //otra función con la firma Tipo_del_segundo_par => Tipo_del_res
     // HINT: presione alt + enter al lado de b para que extracte el tipo de b
-    val e1 = f(1)_
+    val e1: (Int) => Int = f(1)_
 
     //b puede ser entonces evaluada
-    val e2 =  e1(1)
+    val e2: Int =  e1(1)
 
     assert(e2==2)
   }
@@ -27,10 +27,10 @@ class CurryingSuite extends FunSuite with Matchers{
       a+b
     }
 
-    val e1 = f(1)
+    val e1: (Int) => Int = f(1)
 
     //b puede ser entonces evaluada
-    val e2 =  e1(1)
+    val e2: Int =  e1(1)
 
     assert(e2==2)
   }

@@ -17,8 +17,11 @@ class FutureSuite extends FunSuite {
     val hiloPpal = Thread.currentThread().getName
 
     var hiloFuture = ""
+    println(s"El hilo ppal es ${hiloPpal}")
     val saludo = Future {
       hiloFuture = Thread.currentThread().getName
+      println(s"El hilo del future es ${hiloFuture}")
+
       Thread.sleep(500)
       "Hola"
     }
@@ -30,13 +33,20 @@ class FutureSuite extends FunSuite {
   test("map en Future") {
 
 
+    val t1 = Thread.currentThread().getName
+    println(s"El hilo del ppal es ${t1}")
+
 
     val saludo = Future {
+      val t2 = Thread.currentThread().getName
+      println(s"El hilo del future es ${t2}")
 
       Thread.sleep(500)
       "Hola"
     }
     val saludoCompleto = saludo.map(mensaje => {
+      val t3 = Thread.currentThread().getName
+      println(s"El hilo del map es ${t3}")
 
       mensaje + " muchachos"
     })
@@ -64,6 +74,8 @@ class FutureSuite extends FunSuite {
 
     assert(res == 3)
 
+
+
   }
 
   test("Se debe poder manejar el error de un Future de forma imperativa") {
@@ -73,7 +85,7 @@ class FutureSuite extends FunSuite {
     }
     var error = false
 
-    val r = divisionCero.onFailure {
+    val r: Unit = divisionCero.onFailure {
       case e: Exception => error = true
     }
 

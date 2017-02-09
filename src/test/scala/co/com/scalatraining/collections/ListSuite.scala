@@ -24,6 +24,16 @@ class ListSuite extends FunSuite {
     assert(lista2 == lista3)
   }
 
+  test("Map de polizas"){
+    case class Poliza(nro:Int)
+    val l = List(1, 2, 3)
+
+    val r = l.map(numero => Poliza(numero))
+
+    println(r)
+
+  }
+
   test("Una lista se debe poder acumular") {
     val lista = List(1, 2, 3, 4)
     assertResult(10) {
@@ -114,7 +124,7 @@ class ListSuite extends FunSuite {
 
   test("Una lista se debe poder dividir") {
     val lista = List(1, 2, 3, 4)
-    val t = lista.splitAt(2)
+    val t: (List[Int], List[Int]) = lista.splitAt(2)
     assert(t._1 == List(1, 2) && t._2 == List(3, 4))
   }
 
@@ -149,9 +159,12 @@ class ListSuite extends FunSuite {
   test("Una lista se debe poder filtrar con una hof") {
     val lista = List(1, 2, 3, 4)
     assertResult(List(2, 4)) {
-      lista.filter(x =>
-        x % 2 == 0
+      lista.filter(numero =>
+        numero % 2 == 0
       )
+
+      lista.filter(_%2==0)
+
     }
   }
 
