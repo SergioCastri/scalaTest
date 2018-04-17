@@ -183,4 +183,19 @@ class SyntaxSuite extends FunSuite{
 
   }
 
+  test("verificacion de unapply"){
+    class Profesor(nombre:String)
+
+    object Profesor{
+        def unapply(arg: Profesor): Option[String] = Some("NOMBRE-FIJO")
+    }
+
+    new Profesor("JP") match{
+      case Profesor(n) => {
+        assert(n != "JP")
+        assert(n=="NOMBRE-FIJO")
+      }
+    }
+  }
+
 }

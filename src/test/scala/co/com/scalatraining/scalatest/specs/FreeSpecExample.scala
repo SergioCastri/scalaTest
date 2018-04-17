@@ -5,14 +5,15 @@ import org.scalatest.FreeSpec
 class SetFreeSpec extends FreeSpec {
 
   "A Set" - {
+    val s = Set.empty
     "when empty" - {
       "should have size 0" in {
-        assert(Set.empty.size == 0)
+        assert(s.size == 0)
       }
 
       "should produce NoSuchElementException when head is invoked" in {
         assertThrows[NoSuchElementException] {
-          Set.empty.head
+          s.head
         }
       }
     }

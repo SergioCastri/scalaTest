@@ -1,5 +1,7 @@
 package co.com.scalatraining.monads
 
+import java.io.Serializable
+
 import org.scalatest._
 
 import scala.util.{Failure, Success, Try}
@@ -228,6 +230,44 @@ class TrySuite extends FunSuite with Matchers {
     val right = fi(2/0)
     println(s"Ok tengo un right: $right")
     assert(left == right)
+
+  }
+
+  def fnAjena(i:Int):Int = {
+    if(scala.util.Random.nextInt(100) % 2 == 0) i
+    else throw new Exception("Boom")
+  }
+
+  def fnMia(i:Int): Try[Int] ={
+    // Try(fnAjena(i))
+
+    Try{
+      val r = fnAjena(i)
+      println(s"# obtenido: $r")
+      r
+    }
+  }
+
+  def fnMiaConRecuperacion(i:Int):Try[Int]={
+    fnMia(i).recover{case e:Exception => i}
+  }
+
+  test("Composicion de Try con errores aleatorios"){
+    val res = for{
+      z <- Try{fnAjena(0)}.recover{case e:Exception => 0}
+      a <- fnMiaConRecuperacion(2)
+      b <- fnMiaConRecuperacion(3)
+      c <- fnMiaConRecuperacion(100)
+      d <- fnMiaConRecuperacion(300)
+
+    } yield a + b + c + d
+
+    res match {
+      case Success(a) => {
+        assert(a == 405)
+      }
+      case Failure(e) => assert(false)
+    }
 
   }
 

@@ -70,7 +70,7 @@ class OptionSuite extends FunSuite {
 
   test("Un Option se debe poder transformar con flatMap en otro Option") {
     val lista = List(Some("Andres"), None, Some("Luis"), Some("Pedro"))
-    val nombre = lista(0)
+    val nombre = lista(1)
 
     val resultado = nombre.flatMap(s => Option(s.toUpperCase))
     resultado.map( s => assert( s == "ANDRES"))
@@ -115,7 +115,7 @@ class OptionSuite extends FunSuite {
     assert(resultado == None)
   }
 
-  test("for comprehesions None en Option") {
+  test("for comprehesions None en Option 2") {
 
     def consultarNombre(dni:String): Option[String] = Some("Felix")
     def consultarApellido(dni:String): Option[String] = Some("Vergara")

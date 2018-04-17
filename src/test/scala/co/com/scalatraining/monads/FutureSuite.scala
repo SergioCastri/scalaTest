@@ -17,15 +17,17 @@ class FutureSuite extends FunSuite {
     val hiloPpal = Thread.currentThread().getName
 
     var hiloFuture = ""
-    println(s"El hilo ppal es ${hiloPpal}")
-    val saludo = Future {
+
+    println(s"Test 1 - El hilo ppal es ${hiloPpal}")
+
+    val saludo: Future[String] = Future {
       hiloFuture = Thread.currentThread().getName
-      println(s"El hilo del future es ${hiloFuture}")
+      println(s"Test 1 - El hilo del future es ${hiloFuture}")
 
       Thread.sleep(500)
       "Hola"
     }
-    val resultado = Await.result(saludo, 10 seconds)
+    val resultado: String = Await.result(saludo, 10 seconds)
     assert(resultado == "Hola")
     assert(hiloPpal != hiloFuture)
   }
@@ -34,22 +36,31 @@ class FutureSuite extends FunSuite {
 
 
     val t1 = Thread.currentThread().getName
-    println(s"El hilo del ppal es ${t1}")
+    println(s"Test 2 - El hilo del ppal es ${t1}")
 
 
     val saludo = Future {
       val t2 = Thread.currentThread().getName
-      println(s"El hilo del future es ${t2}")
+      println(s"Test 2 - El hilo del future es ${t2}")
 
       Thread.sleep(500)
       "Hola"
     }
+
+    Thread.sleep(5000)
+
+    val saludo2 = Future{
+      println(s"Test 2 - Hilo normal ${Thread.currentThread().getName}")
+    }
+
     val saludoCompleto = saludo.map(mensaje => {
       val t3 = Thread.currentThread().getName
-      println(s"El hilo del map es ${t3}")
+      println(s"Test 2 - El hilo del map es ${t3}")
 
       mensaje + " muchachos"
     })
+
+
     val resultado = Await.result(saludoCompleto, 10 seconds)
     assert(resultado == "Hola muchachos")
   }
@@ -88,6 +99,8 @@ class FutureSuite extends FunSuite {
     val r: Unit = divisionCero.onFailure {
       case e: Exception => error = true
     }
+
+
 
     Thread.sleep(1000)
 
