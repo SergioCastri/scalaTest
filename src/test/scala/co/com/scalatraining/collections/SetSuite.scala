@@ -2,6 +2,8 @@ package co.com.scalatraining.collections
 
 import org.scalatest.FunSuite
 
+import scala.collection.immutable.{BitSet, ListSet, SortedSet}
+
 class SetSuite extends FunSuite {
 
   test("map en un set") {
@@ -92,6 +94,38 @@ class SetSuite extends FunSuite {
     assertResult(10) {
       set.sum
     }
+  }
+
+
+  test("SortedSet"){
+    val s = SortedSet(1,4,3,2)
+
+    assert(s.head==1)
+    assert(s.tail.head==2)
+    assert(s.tail.tail.head==3)
+    assert(s.tail.tail.tail.head==4)
+  }
+
+
+  // Elements are stored internally in reversed insertion order
+  test("ListSet"){
+    val s = ListSet.empty[Int]
+    val r = s + 1 + 4 + 3 + 2
+
+    println(r)
+    assert(r.head==2)
+    assert(r.tail.head==3)e
+    assert(r.tail.tail.head==4)
+    assert(r.tail.tail.tail.head==1)
+  }
+
+  test("BitSet"){
+    val s = BitSet.empty
+    val r = s + 1 + 2 + 3 + 0
+    assert(r.head == 0)
+    assert(r.tail.head == 1)
+    assert(r.tail.tail.head == 2)
+    assert(r.tail.tail.tail.head == 3)
   }
 
 }

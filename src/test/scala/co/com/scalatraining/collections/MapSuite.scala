@@ -2,6 +2,8 @@ package co.com.scalatraining.collections
 
 import org.scalatest.FunSuite
 
+import scala.collection.SortedMap
+
 class MapSuite extends FunSuite {
 
   test ("Creacion vacia") {
@@ -9,6 +11,7 @@ class MapSuite extends FunSuite {
       val mapa2 = Map.empty
       assert(mapa1.isEmpty)
       assert(mapa2.isEmpty)
+      assert(mapa1 == mapa2)
   }
 
   test("Un Map se debe poder operar en un for-comp"){
@@ -26,7 +29,7 @@ class MapSuite extends FunSuite {
   }
 
   test("mapValue en un Map") {
-    val map = Map("1" -> 1, "2" -> 2, "3" -> 3)
+    val map: Map[String, Int] = Map("1" -> 1, "2" -> 2, "3" -> 3)
     assertResult(Map("1" -> 1, "2" -> 4, "3" -> 9)) {
       map.mapValues(valor => valor * valor)
     }
@@ -39,6 +42,29 @@ class MapSuite extends FunSuite {
     }
   }
 
+  test("head en un Map (verificacion con tupla)") {
+    val map = Map("1" -> 1, "2" -> 2, "3" -> 3)
+
+    val x: (String, Int) = map.head
+
+    assert(x._1 == "1")
+    assert(x._2 == 1)
+
+  }
+
+  test("head en un Map vacio") {
+    val map = Map.empty
+
+    assertThrows[NoSuchElementException]{
+      val x = map.head
+    }
+  }
+
+  test("Transformacion de un Map con map"){
+    val m = Map("1"->1,"2"->2,"3"->3)
+    val res = m.map(kv => (kv._1+" the key", kv._2))
+    assert(res("1 the key")==1)
+  }
 
   test("tail en un Map") {
     val map = Map("1" -> 1, "2" -> 2, "3" -> 3)
@@ -95,5 +121,6 @@ class MapSuite extends FunSuite {
       sum
     }
   }
+
 
 }

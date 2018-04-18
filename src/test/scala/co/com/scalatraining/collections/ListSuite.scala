@@ -2,11 +2,13 @@ package co.com.scalatraining.collections
 
 import org.scalatest.FunSuite
 
+import scala.collection.immutable.Seq
+
 class ListSuite extends FunSuite {
 
   test("Una List se debe poder construir") {
 
-    val lista = List(1, 2, 3, 4)
+    val lista: List[Int] = List(1, 2, 3, 4)
     val lista2 = 1 :: 2 :: 3 :: 4 :: Nil
     assert(lista == lista2)
   }
