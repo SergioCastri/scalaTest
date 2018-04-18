@@ -2,6 +2,8 @@ package co.com.scalatraining.monads
 
 import org.scalatest.FunSuite
 
+import scala.collection.immutable.Seq
+
 class OptionSuite extends FunSuite {
 
   test("Se debe poder crear un Option con valor"){
@@ -26,8 +28,8 @@ class OptionSuite extends FunSuite {
   }
 
   test("Se debe poder hacer pattern match sobre un Option") {
-    val lista = List(Some("Andres"), None, Some("Luis"), Some("Pedro"))
-    val nombre = lista(1)
+    val lista: Seq[Option[String]] = List(Some("Andres"), None, Some("Luis"), Some("Pedro"))
+    val nombre: Option[String] = lista(1)
     var res = ""
     res = nombre match {
       case Some(nom) => nom
@@ -70,9 +72,9 @@ class OptionSuite extends FunSuite {
 
   test("Un Option se debe poder transformar con flatMap en otro Option") {
     val lista = List(Some("Andres"), None, Some("Luis"), Some("Pedro"))
-    val nombre = lista(1)
+    val nombre = lista(0)
 
-    val resultado = nombre.flatMap(s => Option(s.toUpperCase))
+    val resultado: Option[String] = nombre.flatMap(s => Option(s.toUpperCase))
     resultado.map( s => assert( s == "ANDRES"))
   }
 
@@ -91,10 +93,12 @@ class OptionSuite extends FunSuite {
     val lista = List(Some(5), None, Some(40), Some(20))
     val s1 = lista(0)
     val s2 = lista(2)
+
     val resultado = for {
       x <- s1
       y <- s2
     } yield x+y
+
     assert(resultado == Some(45))
   }
 

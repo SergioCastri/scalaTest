@@ -16,7 +16,7 @@ class EitherSuite extends FunSuite{
 
   def foo(i:Int): Either[String, Int] = {
     if(i%2==0) Right(i)
-    else Left("El numero es impar")
+    else Left(s"El numero $i es impar")
   }
 
   test("Either left or right"){
@@ -24,7 +24,7 @@ class EitherSuite extends FunSuite{
     assert(foo(2).isRight)
   }
 
-  test("Either test"){
+  test("Un Either se debe poder fold por la derecha"){
     val r: Int  = foo(2).fold[Int]( s => {
         assert(false)
         1
@@ -39,13 +39,47 @@ class EitherSuite extends FunSuite{
 
   }
 
+
+  test("Un Either se debe poder fold por la izquierda"){
+    val r: Int  = foo(7).fold[Int]( s => {
+      assert(true)
+      1
+    }
+      , i => {
+        assert(false)
+        6
+      }
+    )
+
+    assert(r == 1)
+
+  }
+
   test("Swap un Either"){
-    val res: Either[Int, String] = foo(1).swap
+    val res: Either[String, Int] = foo(2)
+    val res2: Either[Int, String] = res.swap
+    assert(res2.isLeft)
 
-    assert(res.isRight)
+  }
 
+  test("for comp en Either todos Right"){
+    val res = for{
+      x <- foo(2)
+      y <- foo(4)
+      z <- foo(6)
+    } yield x + y + z
 
+    assert(res == Right(12))
+  }
 
+  test("for comp en Either con un Left"){
+    val res = for{
+      x <- foo(2)
+      y <- foo(1)
+      z <- foo(6)
+    } yield x + y + z
+
+    assert(res == Left("El numero 1 es impar"))
   }
 
 }

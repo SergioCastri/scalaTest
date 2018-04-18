@@ -2,7 +2,8 @@ package co.com.scalatraining.collections
 
 import org.scalatest.FunSuite
 
-import scala.collection.immutable.{BitSet, ListSet, SortedSet}
+import scala.collection.{BitSet, SortedSet}
+import scala.collection.immutable.ListSet
 
 class SetSuite extends FunSuite {
 
@@ -112,6 +113,8 @@ class SetSuite extends FunSuite {
     val s = ListSet.empty[Int]
     val r = s + 1 + 4 + 3 + 2
 
+    println(r)
+    println(r.head)
     assert(r.head==1)
     assert(r.tail.head==4)
     assert(r.tail.tail.head==3)
