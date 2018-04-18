@@ -189,11 +189,6 @@ class ListSuite extends FunSuite {
     }
   }
 
-
-
-
-
-
   test("Una lista se debe poder recorrer imperativamente") {
     val lista = List(1, 2, 3, 4)
     assertResult(10) {
