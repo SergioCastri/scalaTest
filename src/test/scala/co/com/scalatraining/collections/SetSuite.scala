@@ -112,11 +112,10 @@ class SetSuite extends FunSuite {
     val s = ListSet.empty[Int]
     val r = s + 1 + 4 + 3 + 2
 
-    println(r)
-    assert(r.head==2)
-    assert(r.tail.head==3)e
-    assert(r.tail.tail.head==4)
-    assert(r.tail.tail.tail.head==1)
+    assert(r.head==1)
+    assert(r.tail.head==4)
+    assert(r.tail.tail.head==3)
+    assert(r.tail.tail.tail.head==2)
   }
 
   test("BitSet"){
