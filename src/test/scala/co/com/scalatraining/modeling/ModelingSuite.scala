@@ -12,23 +12,37 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class ModelingSuite extends FunSuite {
 
 
-  test("Debemos poder componer operaciones del algebra"){
+  trait Instruccion
 
-    import co.com.scalatraining.modelling.dominio.servicios.InterpretacionServicioPoliza._
-
-    val npol = "04000000000034"
-
-    val res = for {
-      c   <- crearCobertura("GAR", "SUB")
-      p   <- consultarPoliza(npol)
-      pcc <- adicionarCobertura(c,p)
-      t   <- tarifar(pcc)
-    }yield{
-      t
+  object Instruccion {
+    def newInstruccion(c:Char):Instruccion ={
+      c match {
+        case 'A' => A()
+        case 'D' => D()
+        case 'I' => I()
+        case _ => throw new Exception(s"Caracter invalido para creacion de instruccion: $c")
+      }
     }
+  }
 
-    val tarifa = Await.result(res, 10 seconds)
-    assert(tarifa.prima == 1000)
+  case class A() extends Instruccion
+  case class I() extends Instruccion
+  case class D() extends Instruccion
+
+  test("testing smart constructor"){
+
+    import Instruccion._
+
+    val instruccionA = Try(newInstruccion('A'))
+    val instruccionD = Try(newInstruccion('D'))
+    val instruccionI = Try(newInstruccion('I'))
+    val instruccionInvalida = Try(newInstruccion('.'))
+
+    assert(instruccionA == Success(A()))
+    assert(instruccionD == Success(D()))
+    assert(instruccionI == Success(I()))
+    assert(instruccionInvalida.isFailure)
+
   }
 
 
