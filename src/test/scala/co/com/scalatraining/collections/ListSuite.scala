@@ -4,6 +4,22 @@ import org.scalatest.FunSuite
 
 import scala.collection.immutable.Seq
 
+/**
+  * Hasta Scala 2.12 la taxonomía de colecciones es la siguiente:
+  *
+  * Para inmutables:
+  * https://docs.scala-lang.org/resources/images/collections.immutable.png
+  *
+  * Para mutables:
+  * https://docs.scala-lang.org/resources/images/collections.mutable.png
+  *
+  * La documentación de Scala para colecciones la puede encontrar en:
+  * https://docs.scala-lang.org/overviews/collections/introduction.html
+  *
+  * El api doc de colecciones lo encuentra en:
+  *
+  * https://www.scala-lang.org/api/current/scala/collection/index.html
+  */
 class ListSuite extends FunSuite {
 
   test("Una List se debe poder construir") {
