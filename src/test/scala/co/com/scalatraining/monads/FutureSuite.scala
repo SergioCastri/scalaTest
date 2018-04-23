@@ -4,9 +4,11 @@ import java.util.Random
 import java.util.concurrent.Executors
 
 import org.scalatest.FunSuite
+
+import scala.collection.immutable.IndexedSeq
 import scala.language.postfixOps
 import scala.util.{Failure, Success}
-import scala.concurrent.{ExecutionContext, Await, Future}
+import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -76,7 +78,7 @@ class FutureSuite extends FunSuite {
       2
     }
 
-    val f3 = for {
+    val f3: Future[Int] = for {
       res1 <- f1
       res2 <- f2
     } yield res1 + res2
@@ -184,7 +186,7 @@ class FutureSuite extends FunSuite {
   test("Los future **iniciados** fuera de un for-comp deben iniciar al mismo tiempo") {
 
     val timeForf1 = 100
-    val timeForf2 = 100
+    val timeForf2 = 200
     val timeForf3 = 100
 
     val additionalTime = 50D
@@ -204,7 +206,8 @@ class FutureSuite extends FunSuite {
       3
     }
 
-    val t1 = System.nanoTime()
+    val blah: Long = System.currentTimeMillis()
+    val t1: Long = System.nanoTime()
 
     val resultado = for {
       a <- f1
@@ -215,6 +218,7 @@ class FutureSuite extends FunSuite {
     val res = Await.result(resultado, 10 seconds)
     val elapsed = (System.nanoTime() - t1) / 1.0E09
 
+    println(s"Future **iniciados** fuera del for-comp estimado: $estimatedElapsed real: $elapsed")
     assert(elapsed <= estimatedElapsed)
     assert(res == 6)
 
@@ -226,7 +230,7 @@ class FutureSuite extends FunSuite {
     val timeForf2 = 100
     val timeForf3 = 100
 
-    val estimatedElapsed = (timeForf1 + timeForf2 + timeForf3)/1000
+    val estimatedElapsed:Double = (timeForf1 + timeForf2 + timeForf3)/1000
 
     def f1 = Future {
       Thread.sleep(timeForf1)
@@ -251,6 +255,8 @@ class FutureSuite extends FunSuite {
 
     val res = Await.result(resultado, 10 seconds)
     val elapsed = (System.nanoTime() - t1) / 1.0E09
+
+    println(s"Future **definidos** fuera del for-comp estimado: $estimatedElapsed real: $elapsed")
 
     assert(elapsed >= estimatedElapsed)
     assert(res == 6)
@@ -287,6 +293,30 @@ class FutureSuite extends FunSuite {
 
     assert(elapsed >= estimatedElapsed)
     assert(res == 6)
+  }
+
+  test("Future.sequence"){
+    val resFuture: Future[Int] = Future.sequence {
+      Range(1, 11)
+        .map(Future.successful(_))
+    }.map(l => l.sum/l.size)
+
+    val res = Await.result(resFuture, 10 seconds)
+
+    assert(res ==  Range(1,11).sum/Range(1,11).size)
+
+  }
+
+  test("Future.traverse"){
+    def foo(i:List[Int]):Future[Int]=Future.successful(i.sum/i.size)
+    val resFuture = Future.traverse(Range(1,11).map(Future.successful(_))){
+      x => x
+    }.map(l => l.sum/l.size)
+
+    val res = Await.result(resFuture, 10 seconds)
+
+    assert(res ==  Range(1,11).sum/Range(1,11).size)
+
   }
 
 
