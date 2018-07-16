@@ -1,11 +1,11 @@
-package co.com.scalatraining.monads
+package co.com.scalatraining.effects
 
 import java.util.Random
 import java.util.concurrent.Executors
 
 import org.scalatest.FunSuite
 
-import scala.collection.immutable.IndexedSeq
+import scala.collection.immutable.{IndexedSeq, Seq}
 import scala.language.postfixOps
 import scala.util.{Failure, Success}
 import scala.concurrent.{Await, ExecutionContext, Future}
@@ -117,7 +117,7 @@ class FutureSuite extends FunSuite {
 
     var r = 0
 
-    val f = division.onComplete {
+    val f: Unit = division.onComplete {
       case Success(res) => r = res
       case Failure(e) => r = 1
     }
@@ -177,10 +177,11 @@ class FutureSuite extends FunSuite {
 
     val res = Await.result(f1, 10 seconds)
 
-    println(threadName1)
-    println(threadName2)
+    println(s"Test en recoverWith thread del fallo: $threadName1")
+    println(s"Test en recoverWith thread de recuperacion: $threadName2")
 
     assert(threadName1 != threadName2)
+    assert(res==1)
   }
 
   test("Los future **iniciados** fuera de un for-comp deben iniciar al mismo tiempo") {
@@ -206,7 +207,6 @@ class FutureSuite extends FunSuite {
       3
     }
 
-    val blah: Long = System.currentTimeMillis()
     val t1: Long = System.nanoTime()
 
     val resultado = for {
@@ -227,8 +227,8 @@ class FutureSuite extends FunSuite {
   test("Los future **definidos** fuera de un for-comp deben iniciar secuencialmente") {
 
     val timeForf1 = 100
-    val timeForf2 = 100
-    val timeForf3 = 100
+    val timeForf2 = 300
+    val timeForf3 = 500
 
     val estimatedElapsed:Double = (timeForf1 + timeForf2 + timeForf3)/1000
 
@@ -296,10 +296,14 @@ class FutureSuite extends FunSuite {
   }
 
   test("Future.sequence"){
-    val resFuture: Future[Int] = Future.sequence {
-      Range(1, 11)
-        .map(Future.successful(_))
-    }.map(l => l.sum/l.size)
+
+    val listOfFutures: List[Future[Int]] = Range(1, 11).map(Future.successful(_)).toList
+
+    val resSequence: Future[List[Int]] = Future.sequence {
+      listOfFutures
+    }
+
+    val resFuture = resSequence.map(l => l.sum/l.size)
 
     val res = Await.result(resFuture, 10 seconds)
 

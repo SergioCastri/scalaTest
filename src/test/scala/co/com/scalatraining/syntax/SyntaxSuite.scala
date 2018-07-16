@@ -75,7 +75,7 @@ class SyntaxSuite extends FunSuite{
     }
 
     // A una class se le debe instanciar con new pasándole los atributos que define para su construccion
-    val mc = new MyClass(1)
+    val mc: MyClass = new MyClass(1)
     val res = mc.f1
     assert(res == 2)
   }

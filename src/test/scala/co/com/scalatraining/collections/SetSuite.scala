@@ -7,6 +7,27 @@ import scala.collection.immutable.ListSet
 
 class SetSuite extends FunSuite {
 
+  test("Construccion de un Set"){
+    val set = Set(1,2,3)
+    assert(set.size==3)
+  }
+
+  test("Adicion de un elemento a un Set"){
+    val set = Set.empty[Int]
+    val set2 = set + 1
+    assert(set == Set.empty[Int])
+    assert(set2 == Set(1))
+  }
+
+  test("Un conjunto no debe tener elementos repetidos"){
+    val set = Set.empty[Int]
+    val set2 = set + 1
+    val set3 = set2 + 1
+    assert(set == Set.empty[Int])
+    assert(set2 == Set(1))
+    assert(set3 == Set(1))
+  }
+
   test("map en un set") {
     val set = Set("1", "2", "3")
     val set2 = set.map(dato => dato + "prueba")
@@ -97,6 +118,7 @@ class SetSuite extends FunSuite {
     }
   }
 
+  // -------------------------------------------------------
 
   test("SortedSet"){
     val s = SortedSet(1,4,3,2)

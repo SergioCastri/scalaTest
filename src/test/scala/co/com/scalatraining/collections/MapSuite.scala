@@ -14,6 +14,17 @@ class MapSuite extends FunSuite {
       assert(mapa1 == mapa2)
   }
 
+  test("foreach en un Map") {
+    val map = Map("1" -> 1, "2" -> 2, "3" -> 3)
+    assertResult(6) {
+      var sum = 0
+      map.foreach((x) =>
+        sum += x._2
+      )
+      sum
+    }
+  }
+
   test("Un Map se debe poder operar en un for-comp"){
     val mapa = Map(1->"uno", 2->"dos")
 
@@ -22,16 +33,18 @@ class MapSuite extends FunSuite {
       if i._1 == 1
     } yield(i)
 
-    println(res)
+
     assert(res.keys.size === 1)
     assert(res.keys.head === 1)
-    assert(res.get(mapa.keys.head).get === "uno")
+
+    val x: Option[String] = res.get(1)
+    assert(x == Some("uno"))
   }
 
-  test("mapValue en un Map") {
-    val map: Map[String, Int] = Map("1" -> 1, "2" -> 2, "3" -> 3)
-    assertResult(Map("1" -> 1, "2" -> 4, "3" -> 9)) {
-      map.mapValues(valor => valor * valor)
+  test("crear nuevo Map con un item mas") {
+    val map = Map("1" -> 1, "2" -> 2, "3" -> 3)
+    assertResult(Map("1" -> 1, "2" -> 2, "3" -> 3, "4" -> 4)) {
+      map + ("4" -> 4)
     }
   }
 
@@ -39,6 +52,15 @@ class MapSuite extends FunSuite {
     val map = Map("1" -> 1, "2" -> 2, "3" -> 3)
     assertResult("1" -> 1) {
       map.head
+    }
+  }
+
+
+  test("head en un Map vacio") {
+    val map = Map.empty
+
+    assertThrows[NoSuchElementException]{
+      val x = map.head
     }
   }
 
@@ -50,20 +72,6 @@ class MapSuite extends FunSuite {
     assert(x._1 == "1")
     assert(x._2 == 1)
 
-  }
-
-  test("head en un Map vacio") {
-    val map = Map.empty
-
-    assertThrows[NoSuchElementException]{
-      val x = map.head
-    }
-  }
-
-  test("Transformacion de un Map con map"){
-    val m = Map("1"->1,"2"->2,"3"->3)
-    val res = m.map(kv => (kv._1+" the key", kv._2))
-    assert(res("1 the key")==1)
   }
 
   test("tail en un Map") {
@@ -79,16 +87,11 @@ class MapSuite extends FunSuite {
     assert(map2 == Map("1" -> 1, "2" -> 2) && map3 == Map("3" -> 3))
   }
 
-  test("crear nuevo Map con un item mas") {
-    val map = Map("1" -> 1, "2" -> 2, "3" -> 3)
-    assertResult(Map("1" -> 1, "2" -> 2, "3" -> 3, "4" -> 4)) {
-      map + ("4" -> 4)
-    }
-  }
-
 
   test("drop en un Map") {
-    val map = Map("1" -> 1, "2" -> 2, "3" -> 3)
+
+
+   val map = Map("1" -> 1, "2" -> 2, "3" -> 3)
     assertResult(Map("2" -> 2, "3" -> 3)) {
       map.drop(1)
     }
@@ -102,6 +105,9 @@ class MapSuite extends FunSuite {
   }
 
 
+  // -----------------------------------------
+
+
   test("filter en un Map") {
     val map = Map("1" -> 1, "2" -> 2, "3" -> 3, "4" -> 4)
     assertResult(Map("2" -> 2, "4" -> 4)) {
@@ -111,16 +117,17 @@ class MapSuite extends FunSuite {
     }
   }
 
-  test("foreach en un Map") {
-    val map = Map("1" -> 1, "2" -> 2, "3" -> 3)
-    assertResult(6) {
-      var sum = 0
-      map.foreach((x) =>
-        sum += x._2
-      )
-      sum
-    }
+  test("Transformacion de un Map con map"){
+    val m = Map("1"->1,"2"->2,"3"->3)
+    val res = m.map(kv => (kv._1+" the key", kv._2))
+    assert(res("1 the key")==1)
   }
 
+  test("mapValues en un Map") {
+    val map: Map[String, Int] = Map("1" -> 1, "2" -> 2, "3" -> 3)
+    assertResult(Map("1" -> 1, "2" -> 4, "3" -> 9)) {
+      map.mapValues(valor => valor * valor)
+    }
+  }
 
 }

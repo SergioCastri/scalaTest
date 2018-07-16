@@ -29,6 +29,23 @@ class ListSuite extends FunSuite {
     assert(lista == lista2)
   }
 
+  test("Se puede hacer una lista de un solo tipo"){
+    assertDoesNotCompile( "val l = List[String](\"1\", \"2\", 3)")
+  }
+
+
+  test("Una lista se debe poder recorrer imperativamente") {
+    val lista = List(1, 2, 3, 4)
+    assertResult(10) {
+      var sum = 0
+      lista.foreach((x) =>
+        sum += x
+      )
+      sum
+    }
+  }
+
+
   test("A una lista se le debe poder adicionar elementos"){
     val l1 = List(1,2,3)
     val l2 = 4::l1
@@ -65,12 +82,6 @@ class ListSuite extends FunSuite {
     }
   }
 
-  test("Se debe poder acceder al primer elemento de List() de forma segura") {
-    val lista = List()
-    val result = lista.headOption
-    assert(result == None)
-  }
-
   test("Se debe poder obtener todos los elementos de una lista sin el primer elemento") {
     val lista = List(1, 2, 3, 4)
     assertResult(List(2, 3, 4)) {
@@ -83,29 +94,6 @@ class ListSuite extends FunSuite {
     assertThrows[UnsupportedOperationException] {
       val res =  lista.tail
     }
-  }
-
-  test("Una List se debe poder transformar") {
-
-    def f(s:String):String = s+"prueba"
-
-    val lista = List("1", "2", "3")
-    val lista2 = lista.map(dato => dato + "prueba")
-    val lista3 = lista.map(dato => f(dato))
-
-    assert(lista2.head == "1prueba")
-    assert(lista != lista2)
-    assert(lista2 == lista3)
-  }
-
-  test("Verificacion de map sobre una List"){
-    case class MyCaseClass(nro:Int)
-    val l = List(1, 2, 3)
-
-    val r = l.map(numero => MyCaseClass(numero))
-
-    assert(r == List(MyCaseClass(1),MyCaseClass(2),MyCaseClass(3)))
-
   }
 
   test("Una lista se debe poder filtrar con una hof") {
@@ -127,20 +115,6 @@ class ListSuite extends FunSuite {
         acumulado + item
       }
     }
-  }
-
-  test("fold sobre una List de objetos"){
-    case class MyCaseClass(i:Int, var s:String)
-    val lista: List[MyCaseClass] = List( MyCaseClass(1,"1"),  MyCaseClass(2, "2"))
-
-    assertResult("12"){
-      lista.map(x=>x.s).fold(""){(acc,item)=>acc+item}
-    }
-  }
-
-  test("test - obtenga el promedio de los numeros pares") {
-    val lista = List(1, 2, 3, 4, 6, 7, 8, 9, 10)
-    assert(true)
   }
 
   test("Una lista se debe poder acumular en una direccion determinada (izquierda)") {
@@ -166,10 +140,19 @@ class ListSuite extends FunSuite {
   }
 
 
-  test("Una tupla se debe poder crear"){
-    val tupla = (1, 2,"3", List(1, 2, 3))
-    assert(tupla._2 == 2)
-    assert(tupla._4.tail.head == 2)
+
+  test("fold sobre una List de objetos"){
+    case class MyCaseClass(i:Int, var s:String)
+    val lista: List[MyCaseClass] = List( MyCaseClass(1,"1"),  MyCaseClass(2, "2"))
+
+    assertResult("12"){
+      lista.map(x=>x.s).fold(""){(acc,item)=>acc+item}
+    }
+  }
+
+  test("test - obtenga el promedio de los numeros pares") {
+    val lista = List(1, 2, 3, 4, 6, 7, 8, 9, 10)
+    assert(true)
   }
 
   test("Una lista se debe poder dividir") {
@@ -178,25 +161,10 @@ class ListSuite extends FunSuite {
     assert(t._1 == List(1, 2) && t._2 == List(3, 4))
   }
 
-  test("Se puede hacer una lista de un solo tipo"){
-    assertDoesNotCompile( "val l = List[String](\"1\", \"2\", 3)")
-  }
-
   test("Una lista se debe poder reversar") {
     val lista = List(1, 2, 3, 4)
     assertResult(List(4, 3, 2, 1)) {
       lista.reverse
-    }
-  }
-
-  test("Una lista se debe poder recorrer imperativamente") {
-    val lista = List(1, 2, 3, 4)
-    assertResult(10) {
-      var sum = 0
-      lista.foreach((x) =>
-        sum += x
-      )
-      sum
     }
   }
 
@@ -207,11 +175,36 @@ class ListSuite extends FunSuite {
     }
   }
 
-  test("Se pueden poder sumar los elementos de una lista") {
-    val lista = List(1, 2, 3, 4)
-    assertResult(10) {
-      lista.sum
-    }
+  // ----------------------------------
+
+  test("Se debe poder acceder al primer elemento de List() de forma segura") {
+    val lista = List()
+    val result = lista.headOption
+    assert(result == None)
+  }
+
+
+  test("Una List se debe poder transformar") {
+
+    def f(s:String):String = s+"prueba"
+
+    val lista = List("1", "2", "3")
+    val lista2 = lista.map(dato => dato + "prueba")
+    val lista3 = lista.map(dato => f(dato))
+
+    assert(lista2.head == "1prueba")
+    assert(lista != lista2)
+    assert(lista2 == lista3)
+  }
+
+  test("Verificacion de map sobre una List"){
+    case class MyCaseClass(nro:Int)
+    val l = List(1, 2, 3)
+
+    val r = l.map(numero => MyCaseClass(numero))
+
+    assert(r == List(MyCaseClass(1),MyCaseClass(2),MyCaseClass(3)))
+
   }
 
 

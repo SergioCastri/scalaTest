@@ -1,4 +1,4 @@
-package co.com.scalatraining.monads
+package co.com.scalatraining.effects
 
 import java.io.Serializable
 

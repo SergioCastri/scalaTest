@@ -1,4 +1,4 @@
-package co.com.scalatraining.monads
+package co.com.scalatraining.effects
 
 import org.scalatest.FunSuite
 
@@ -60,6 +60,13 @@ class EitherSuite extends FunSuite{
     val res2: Either[Int, String] = res.swap
     assert(res2.isLeft)
 
+  }
+
+  test("Swap un Either Left"){
+    val res: Either[String, Int] = foo(1)
+    val res2: Either[Int, String] = res.swap
+    assert(res2.isRight)
+    assert(res2== Right("El numero 1 es impar"))
   }
 
   test("for comp en Either todos Right"){

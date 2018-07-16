@@ -7,7 +7,7 @@ import scala.collection.immutable._
 
 class SetPropSpec extends PropSpec with TableDrivenPropertyChecks with Matchers {
 
-  val examples =
+  val examples: TableFor1[Set[Int] with Serializable] =
     Table(
       "set",
       BitSet.empty,
