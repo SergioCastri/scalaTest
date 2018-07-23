@@ -256,14 +256,14 @@ class ListSuite extends FunSuite {
 
   test("Una List se debe poder transformar de string a int") {
     var cont = 0
-    def f(s:String):Int = s.length
+    def f(s:String):Int = s.length()
 
     val lista = List("sergio", "santiago", "juan")
     //val lista2 = lista.map(dato => 1 + cont)
     val lista3 = lista.map(dato => f(dato) )
 
-    assert(lista3.head == "1")
-    assert(lista != lista3)
+    assert(lista3.head == 6)
+    ///assert(lista != lista3)
    // assert(lista2 == lista3)
   }
   test("Verificacion de map sobre una List"){
