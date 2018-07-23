@@ -78,6 +78,8 @@ class SyntaxSuite extends FunSuite{
     val mc: MyClass = new MyClass(1)
     val res = mc.f1
     assert(res == 2)
+    val mc2: MyClass = new MyClass(1)
+    assert(mc != mc2)
   }
 
   test("A un class se le puede  mutar su estado"){
@@ -160,6 +162,19 @@ class SyntaxSuite extends FunSuite{
     val mc = new MyClass
     val res = mc.f1(1)
     assert(res == 2)
+  }
+
+  test("Un trait puede tener tambien implementaciones 2"){
+    trait MyTrait {
+      def f1(a:Int) = a + 1
+    }
+
+    object my_obj extends MyTrait {
+      override def f1(a:Int) = a + 1
+      val res = f1(1)
+
+      assert(res == 2)
+    }
   }
 
 
