@@ -210,6 +210,8 @@ class SyntaxSuite extends FunSuite{
         assert(n != "JP")
         assert(n=="NOMBRE-FIJO")
       }
+
+
     }
   }
 

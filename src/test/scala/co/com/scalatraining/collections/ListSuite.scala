@@ -52,6 +52,21 @@ class ListSuite extends FunSuite {
     assert(l2 == List(4,1,2,3))
   }
 
+
+  test("se puede concatenar listas"){
+    val l1 = List(1,2)
+    val l2 = List(3,4)
+    val l3 = l1:::l2
+    assert(l3 == List(1,2,3,4))
+  }
+
+  test("Adicionar elementos con +:  con :+") {
+    val lista = List( 2, 3, 4)
+    val l1 = 1 +: lista :+ 5
+    assert(l1 == List(1,2,3,4,5))
+
+  }
+
   test("A una lista se le debe poder eliminar elementos con drop") {
     val lista = List(1, 2, 3, 4)
     val dropped =lista.drop(2)
@@ -68,7 +83,8 @@ class ListSuite extends FunSuite {
     }
   }
 
-  test("Se debe poder consultar el primer elemento de una lista de forma insegura") {
+
+  test("Se debe poder consultar el primer elemento de una lista de forma insegura") {  //recomendado nunca usar head
     val lista = List(1, 2, 3, 4)
     assertResult(1) {
       lista.head
@@ -103,9 +119,24 @@ class ListSuite extends FunSuite {
         numero % 2 == 0
       )
 
-      lista.filter(_%2==0)
+      lista.filter(_%2==0)     //tratar de no usarlo, (hacerlo como arriba "numero => numero %2 ==0")
 
     }
+  }
+
+
+  test("dropwhile") {
+    val lista = List(1, 2, 3, 4, 5)
+      val res = lista.dropWhile(numero =>
+        numero % 2 != 0
+      )
+      println(res)
+      assert(res == List(2,3,4,5))
+    val res2 = lista.dropWhile(numero =>
+      numero % 2 == 0
+    )
+    println(res2)
+    assert(res2 == List(1,2,3,4,5))
   }
 
   test("Una lista se debe poder acumular") {
@@ -113,6 +144,31 @@ class ListSuite extends FunSuite {
     assertResult(10) {
       lista.fold(0) { (acumulado, item) =>
         acumulado + item
+      }
+    }
+  }
+
+
+  test("Un promedio") {
+    val lista = List(1, 2, 3, 4, 6, 7, 8, 9, 10)
+    val res1 = lista.filter(numero =>
+      numero % 2 == 0
+    )
+    println(res1)
+      val res2 = res1.fold(0) { (acumulado, item) =>
+        acumulado + item
+      }
+    val res = res2 / res1.length
+    println(res)
+    println(res2)
+      assert(res == 6)
+  }
+
+  test("Una lista se debe poder acumular fold para multiplicacion y suma") {
+    val lista = List(1, 2, 3)
+    assertResult(21) {
+      lista.fold(1) { (acumulado, item) =>
+        (acumulado * item) + item
       }
     }
   }
@@ -197,6 +253,19 @@ class ListSuite extends FunSuite {
     assert(lista2 == lista3)
   }
 
+
+  test("Una List se debe poder transformar de string a int") {
+    var cont = 0
+    def f(s:String):Int = s.length
+
+    val lista = List("sergio", "santiago", "juan")
+    //val lista2 = lista.map(dato => 1 + cont)
+    val lista3 = lista.map(dato => f(dato) )
+
+    assert(lista3.head == "1")
+    assert(lista != lista3)
+   // assert(lista2 == lista3)
+  }
   test("Verificacion de map sobre una List"){
     case class MyCaseClass(nro:Int)
     val l = List(1, 2, 3)
