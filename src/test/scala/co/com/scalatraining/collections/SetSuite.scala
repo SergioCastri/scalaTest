@@ -67,6 +67,8 @@ class SetSuite extends FunSuite {
     assertResult(true) {
       set.apply(4)
     }
+    println(set(4))
+
   }
 
   test("drop en set") {
@@ -133,6 +135,7 @@ class SetSuite extends FunSuite {
   // Elements are stored internally in reversed insertion order
   test("ListSet"){
     val s = ListSet.empty[Int]
+    println(s)
     val r = s + 1 + 4 + 3 + 2
 
     println(r)
@@ -150,6 +153,31 @@ class SetSuite extends FunSuite {
     assert(r.tail.head == 1)
     assert(r.tail.tail.head == 2)
     assert(r.tail.tail.tail.head == 3)
+  }
+
+  test("union en conjuntos") {
+    val c1: Set[Int] = Set(1,2)
+    val c2: Set[Int] = Set(1,4,2,5,7,8)
+    val union = c1.union(c2)
+    val inter = c1.intersect(c2)
+    val ds = c2.diff(c1)
+    assert(Set(1,2,4,5,7,8) == union)
+    assert(Set(1,2) == inter)
+    assert(Set(4,5,7,8) == ds)
+
+
+
+    val c3: Set[Int] = Set(1,2,3,4)
+    val c4: Set[Int] = Set(1,4,5,6,7)
+    val union1 = c3.foldLeft(c4) { (acumulado, item) =>
+      acumulado + item
+    }
+    val inter1 = c3.filter(x => c4(x))
+   // val ds1 = c3.filter(x => !c4(x))
+
+    assert(Set(1,2,3,4,5,6,7) == union1)
+    assert(Set(1,4) == inter1)
+    //assert(Set(6,7) == ds1)
   }
 
 }

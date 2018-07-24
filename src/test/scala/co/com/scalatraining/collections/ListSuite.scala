@@ -206,10 +206,18 @@ class ListSuite extends FunSuite {
     }
   }
 
-  test("test - obtenga el promedio de los numeros pares") {
-    val lista = List(1, 2, 3, 4, 6, 7, 8, 9, 10)
-    assert(true)
+  test("test - promedio de lista en listas") {
+    val lista = List(List(1,1), List(2,2), Nil)
+    val res = lista.filter(!_.isEmpty).flatMap(x => List(x.sum / x.length))
+    println(res)
+    assert(List(1,2) == res )
+
+
   }
+
+
+  val lista = List("1", "2", "3")
+  val lista2 = lista.map(dato => dato + "prueba")
 
   test("Una lista se debe poder dividir") {
     val lista = List(1, 2, 3, 4)
@@ -252,6 +260,8 @@ class ListSuite extends FunSuite {
     assert(lista != lista2)
     assert(lista2 == lista3)
   }
+
+
 
 
   test("Una List se debe poder transformar de string a int") {

@@ -130,4 +130,13 @@ class MapSuite extends FunSuite {
     }
   }
 
+  test("String largo, numero de palabras") {
+    val texto = "Hola todos todos"
+    val res = texto.split(" ").groupBy(x => x).mapValues(_.size)
+    assert(Map("todos" -> 2, "Hola" -> 1) == res)
+
+  }
+
+
+
 }
