@@ -137,6 +137,26 @@ class MapSuite extends FunSuite {
 
   }
 
+  test("Map with how many words and in a text") {
+    var map: Map[String, Int] = Map()
+    val texto: String = "hola a todo el mundo hola hola"
+
+    println(texto.split(" ").groupBy(x => x).mapValues(x => x.size))    //1era implementacion
+    texto.split(" ").foldLeft(Map[String, Int]())((m,i) => m + (i -> (m.getOrElse(i, 0) + 1)))  //2da implementacion
+
+    val r: Array[String] = texto.split(" ")
+    val sin: Array[String] = r.distinct
+
+    println(sin.map(x => x -> r.count(ele => ele == x)).toMap)    //3era implementacion
+
+    sin.foreach(x =>
+      map = map + (x -> r.count(ele => ele == x))
+    )
+
+    println(map)
+
+
+  }
 
 
 }
