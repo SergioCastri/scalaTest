@@ -102,6 +102,24 @@ class OptionSuite extends FunSuite {
     assert(resultado == Some(45))
   }
 
+  test("for comprehensions en Option 3") {
+    val o1 = Some(1)
+    val o2 = Some(2)
+    val o3 = Some(2)
+    val res: Option[Int] = o1.flatMap(x =>
+      o2.flatMap(y=>
+        o3.flatMap(z =>
+          Option(x + y +z))))
+
+
+    val resultado = for {
+      x <- o1
+      y <- o2
+      z <- o3
+    } yield x+y +z
+    assert(res == resultado)
+  }
+
   test("for comprehesions None en Option") {
     val consultarNombre = Some("Andres")
     val consultarApellido = Some("Estrada")
@@ -138,5 +156,94 @@ class OptionSuite extends FunSuite {
     assert(resultado == None)
   }
 
+  test("pattern match en flapMap"){
+    val option: Option[Int] = Some(5)
+
+    def foo(i:Int):Option[Int]= {
+      if(i%2 == 0){
+        Option(i)
+      }else
+        None
+    }
+
+   val res1: Option[Int] = option match {
+      case None => None
+      case Some(x) => foo(x)
+    }
+
+    val res2 = option.flatMap(foo(_))
+    assert(res1 == res2)
+  }
+
+  test("pattern match en map") {
+    val option: Option[Int] = Some(6)
+
+    def foo(i: Int): Option[Int] = {
+      if (i % 2 == 0) {
+        Option(i)
+      } else
+        None
+    }
+
+    val res1 = option match {
+      case None => None
+      case Some(x) => Some(foo(x))
+    }
+    val res2 = option.map(foo(_))
+    assert(res1 ==res2)
+  }
+
+  test("pattern match en foreach") {
+    val option: Option[Int] = Some(6)
+    var paso = 0
+    def foo(i: Int): Option[Int] = {
+      if (i % 2 == 0) {
+        paso = i
+        Option(i)
+      } else
+        None
+   }
+    val res1 = option match {
+      case None => ()
+      case Some(x) => foo(x)
+    }
+  assert(res1 == Some(paso))
+  }
+
+
+  test("pattern match en exist") {
+    val option: Option[Int] = Some(6)
+
+    val res1 = option match {
+      case None => false
+      case Some(x) => x == 5
+    }
+    val res2 =  option.exists(x => x == 5)
+    assert(res1 ==res2)
+  }
+
+  test("pattern match en orElse") {
+    val option: Option[Int] = Some(6)
+    val res1 = option.orElse(Some(2))
+    val res2 = None.orElse(Some(2))
+    assert(res1 == Some(6))
+    assert(res2 == Some(2))
+
+  }
+
+  test("pattern match en getOrElse") {
+    val option: Option[Int] = Some(6)
+    val res1 = option.getOrElse(Option(3))
+    val res2 = None.getOrElse(3)
+    println(res1)
+    println(res2)
+    assert(res1 == 6)
+    assert(res2 == 3)
+
+  }
 }
+
+
+
+
 
