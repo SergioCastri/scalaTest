@@ -28,8 +28,9 @@ class FutureSuite extends FunSuite {
 
       Thread.sleep(500)
       "Hola"
+
     }
-    val resultado: String = Await.result(saludo, 10 seconds)
+    val resultado: String = Await.result(saludo, 10 seconds)   //NUNCA un await
     assert(resultado == "Hola")
     assert(hiloPpal != hiloFuture)
   }
@@ -47,9 +48,11 @@ class FutureSuite extends FunSuite {
 
       Thread.sleep(500)
       "Hola"
+
     }
 
     Thread.sleep(5000)
+    println(saludo)
 
     val saludo2 = Future{
       println(s"Test 2 - Hilo normal ${Thread.currentThread().getName}")
@@ -82,13 +85,29 @@ class FutureSuite extends FunSuite {
       res1 <- f1
       res2 <- f2
     } yield res1 + res2
+    val res = Await.result(f3, 10 seconds)
+    assert(res == 3)
+  }
+
+  test("Se debe poder encadenar Future con for-comp 2") {
+    val f1 = Future {
+      Thread.sleep(200)
+      1
+    }
+
+    val f2 = Future {
+      Thread.sleep(200)
+      2 / 0
+    }
+
+    val f3: Future[Int] = for {
+      res1 <- f1
+      res2 <- f2.recover{case e:Exception => 2}
+      res3 <- f1
+    } yield res1 + res2 +res3
 
     val res = Await.result(f3, 10 seconds)
-
-    assert(res == 3)
-
-
-
+    assert(res == 4)
   }
 
   test("Se debe poder manejar el error de un Future de forma imperativa") {

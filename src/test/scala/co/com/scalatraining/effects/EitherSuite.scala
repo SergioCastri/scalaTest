@@ -12,6 +12,7 @@ class EitherSuite extends FunSuite{
   test("Either right"){
     val e = Right(1)
     assert(e.isRight)
+    println(e)
   }
 
   def foo(i:Int): Either[String, Int] = {
