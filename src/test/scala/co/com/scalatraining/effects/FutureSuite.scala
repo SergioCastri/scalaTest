@@ -3,6 +3,7 @@ package co.com.scalatraining.effects
 import java.util.Random
 import java.util.concurrent.Executors
 
+
 import org.scalatest.FunSuite
 
 import scala.collection.immutable.{IndexedSeq, Seq}
@@ -26,10 +27,16 @@ class FutureSuite extends FunSuite {
       hiloFuture = Thread.currentThread().getName
       println(s"Test 1 - El hilo del future es ${hiloFuture}")
 
-      Thread.sleep(500)
+     //Thread.sleep(500)
       "Hola"
 
     }
+    println(saludo.foreach(println))
+    println(1)
+    println(1)
+    println(1)
+    println(1)
+
     val resultado: String = Await.result(saludo, 10 seconds)   //NUNCA un await
     assert(resultado == "Hola")
     assert(hiloPpal != hiloFuture)
@@ -52,7 +59,6 @@ class FutureSuite extends FunSuite {
     }
 
     Thread.sleep(5000)
-    println(saludo)
 
     val saludo2 = Future{
       println(s"Test 2 - Hilo normal ${Thread.currentThread().getName}")
@@ -137,15 +143,43 @@ class FutureSuite extends FunSuite {
     var r = 0
 
     val f: Unit = division.onComplete {
-      case Success(res) => r = res
-      case Failure(e) => r = 1
+    case Success(res) => r = res
+    case Failure(e) => r = 1
     }
 
     Thread.sleep(150)
 
-    val res = Await.result(division, 10 seconds)
-
     assert(r == 5)
+  }
+
+  test("Se debe poder manejar el exito de un Future de forma funcional") {
+
+    val division = Future {
+      5 / 0
+    }
+
+    var r = 0
+
+    Thread.sleep(150)
+    val fe: Future[Int] = division.map(x => x + 1).recover{case e: Exception => 4}
+
+    r = r + Await.result(fe, 10 seconds)
+    assert(r == 4)
+  }
+
+  test("Se debe poder manejar el exito de un Future de forma funcional 2") {
+
+    val division = Future {
+      5
+    }
+
+    var r = 0
+
+    Thread.sleep(150)
+    val fe: Future[Int] = division.map(x => x + 1).recover{case e: Exception => 4}
+
+    r = r + Await.result(fe, 10 seconds)
+    assert(r == 6)
   }
 
   test("Se debe poder manejar el error de un Future de forma funcional sincronicamente") {
@@ -341,6 +375,38 @@ class FutureSuite extends FunSuite {
     assert(res ==  Range(1,11).sum/Range(1,11).size)
 
   }
+
+  test("Clima") {
+    def clima(ec: ExecutionContext): Future[String] = {
+      val clima: Future[String] = Future {
+        val hiloFutureClima = Thread.currentThread().getName
+        hiloFutureClima + "  Estamos a 23°"
+      }(ec)
+      clima
+
+    }
+
+    def guardar(ec: ExecutionContext): Future[String] = {
+      val guardar: Future[String] = Future {
+        var hiloFutureGuardar = Thread.currentThread().getName
+        hiloFutureGuardar +"   Guardado en la base de datos"
+      }(ec)
+      guardar
+    }
+
+      val contextoClima = ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(5))
+      val contextoGuardar = ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(1))
+
+
+     val res= Range(1,14).map(x=> clima(contextoClima).flatMap(y =>  guardar(contextoGuardar).map(x => x + y)))
+    //val res= Range(1,10).map(x=> clima(contextoClima))
+
+    //println(res)
+
+
+    }
+
+
 
 
 }

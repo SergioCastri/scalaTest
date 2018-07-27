@@ -4,6 +4,7 @@ import java.io.Serializable
 
 import org.scalatest._
 
+import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 
 class TrySuite extends FunSuite with Matchers {
