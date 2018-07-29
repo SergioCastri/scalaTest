@@ -380,17 +380,19 @@ class FutureSuite extends FunSuite {
     def clima(ec: ExecutionContext): Future[String] = {
       val clima: Future[String] = Future {
         val hiloFutureClima = Thread.currentThread().getName
-        hiloFutureClima + "  Estamos a 23°"
+        " Estamos a 23 grados"
       }(ec)
-      clima
+      Await.result(clima, 10 seconds)
 
+      clima
     }
 
     def guardar(ec: ExecutionContext): Future[String] = {
       val guardar: Future[String] = Future {
         var hiloFutureGuardar = Thread.currentThread().getName
-        hiloFutureGuardar +"   Guardado en la base de datos"
+        "Guardado en la base de datos"
       }(ec)
+      Await.result(guardar, 10 seconds)
       guardar
     }
 
@@ -398,11 +400,10 @@ class FutureSuite extends FunSuite {
       val contextoGuardar = ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(1))
 
 
-     val res= Range(1,14).map(x=> clima(contextoClima).flatMap(y =>  guardar(contextoGuardar).map(x => x + y)))
+     val res= Range(1,15).map(x=> clima(contextoClima).flatMap(y=> guardar(contextoGuardar).map(z=>z+y))).toList
     //val res= Range(1,10).map(x=> clima(contextoClima))
-
-    //println(res)
-
+    println(res)
+    assert(res == List(Future("Guardado en la base de datos Estamos a 23 grados"), Future("Guardado en la base de datos Estamos a 23 grados"), Future("Guardado en la base de datos Estamos a 23 grados"), Future("Guardado en la base de datos Estamos a 23 grados"), Future("Guardado en la base de datos Estamos a 23 grados"), Future("Guardado en la base de datos Estamos a 23 grados"), Future("Guardado en la base de datos Estamos a 23 grados"), Future("Guardado en la base de datos Estamos a 23 grados"), Future("Guardado en la base de datos Estamos a 23 grados"), Future("Guardado en la base de datos Estamos a 23 grados"), Future("Guardado en la base de datos Estamos a 23 grados"), Future("Guardado en la base de datos Estamos a 23 grados"), Future("Guardado en la base de datos Estamos a 23 grados"), Future("Guardado en la base de datos Estamos a 23 grados")))
 
     }
 
