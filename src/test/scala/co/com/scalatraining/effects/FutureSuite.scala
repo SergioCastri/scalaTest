@@ -390,11 +390,14 @@ class FutureSuite extends FunSuite {
         "Guardado en la base de datos"
       }(ec)
       val r = Await.result(guardar, 10 seconds)
+
+      Await.result(guardar, 10 seconds)
       guardar
     }
 
     val contextoClima = ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(5))
     val contextoGuardar = ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(1))
+
 
 
     val res= Range(1,15).map(x=> clima(contextoClima).flatMap(y=> guardar(contextoGuardar).map(z=>z+y))).toList
@@ -404,6 +407,7 @@ class FutureSuite extends FunSuite {
     assert(r == List("Guardado en la base de datos Estamos a 23 grados", "Guardado en la base de datos Estamos a 23 grados","Guardado en la base de datos Estamos a 23 grados","Guardado en la base de datos Estamos a 23 grados", "Guardado en la base de datos Estamos a 23 grados", "Guardado en la base de datos Estamos a 23 grados", "Guardado en la base de datos Estamos a 23 grados", "Guardado en la base de datos Estamos a 23 grados", "Guardado en la base de datos Estamos a 23 grados", "Guardado en la base de datos Estamos a 23 grados", "Guardado en la base de datos Estamos a 23 grados", "Guardado en la base de datos Estamos a 23 grados", "Guardado en la base de datos Estamos a 23 grados", "Guardado en la base de datos Estamos a 23 grados"))
 
   }
+
 
 
 

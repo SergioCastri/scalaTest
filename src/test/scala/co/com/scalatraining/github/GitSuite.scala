@@ -11,6 +11,7 @@ class GitSuite () extends FunSuite{
   test ("prueba de sevicios de github"){
     val consulta = new Consulta()
     val res: Future[Respuesta] = consulta.obtenerUsuarioCompleto("sergio")
+
     val r = Await.result(res, 30 seconds)
     val res2 = Respuesta(List(RepositorioPorUsuario("javaTraining","java",500), RepositorioPorUsuario("scalaTraining","scala",100), RepositorioPorUsuario("fizzbuzz","scala",30)),List(NumeroLenguaje("scala",2), NumeroLenguaje("java",1)))
     assert(r ==  res2)
