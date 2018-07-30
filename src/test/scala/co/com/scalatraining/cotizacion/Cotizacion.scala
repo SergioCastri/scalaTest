@@ -18,7 +18,7 @@ class Cotizacion () extends FunSuite {
     val entrada = List(c1,c2,c3,c4,c5,c6,c7,c8)
 
     val prueba: Limpiar = new Limpiar()
-    assert(prueba.clean(entrada) == Map("2018/08" -> 40000000, "2018/07" -> 20000000, "2018/10" -> 30000000, "2018/09" -> 40000000))
+    assert(prueba.clean(entrada) == Map("2018/08" -> 20000000, "2018/07" -> 30000000, "2018/10" -> 30000000, "2018/09" -> 60000000))
   }
 }
 
