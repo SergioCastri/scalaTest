@@ -32,10 +32,7 @@ class FutureSuite extends FunSuite {
 
     }
     println(saludo.foreach(println))
-    println(1)
-    println(1)
-    println(1)
-    println(1)
+
 
     val resultado: String = Await.result(saludo, 10 seconds)   //NUNCA un await
     assert(resultado == "Hola")
@@ -380,31 +377,33 @@ class FutureSuite extends FunSuite {
     def clima(ec: ExecutionContext): Future[String] = {
       val clima: Future[String] = Future {
         val hiloFutureClima = Thread.currentThread().getName
-        hiloFutureClima + "  Estamos a 23°"
+        " Estamos a 23 grados"
       }(ec)
-      clima
+      Await.result(clima, 10 seconds)
 
+      clima
     }
 
     def guardar(ec: ExecutionContext): Future[String] = {
       val guardar: Future[String] = Future {
         var hiloFutureGuardar = Thread.currentThread().getName
-        hiloFutureGuardar +"   Guardado en la base de datos"
+        "Guardado en la base de datos"
       }(ec)
+      val r = Await.result(guardar, 10 seconds)
       guardar
     }
 
-      val contextoClima = ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(5))
-      val contextoGuardar = ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(1))
+    val contextoClima = ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(5))
+    val contextoGuardar = ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(1))
 
 
-     val res= Range(1,14).map(x=> clima(contextoClima).flatMap(y =>  guardar(contextoGuardar).map(x => x + y)))
+    val res= Range(1,15).map(x=> clima(contextoClima).flatMap(y=> guardar(contextoGuardar).map(z=>z+y))).toList
+    val r = res.map(x=> Await.result(x, 10 seconds))
     //val res= Range(1,10).map(x=> clima(contextoClima))
+    println(r)
+    assert(r == List("Guardado en la base de datos Estamos a 23 grados", "Guardado en la base de datos Estamos a 23 grados","Guardado en la base de datos Estamos a 23 grados","Guardado en la base de datos Estamos a 23 grados", "Guardado en la base de datos Estamos a 23 grados", "Guardado en la base de datos Estamos a 23 grados", "Guardado en la base de datos Estamos a 23 grados", "Guardado en la base de datos Estamos a 23 grados", "Guardado en la base de datos Estamos a 23 grados", "Guardado en la base de datos Estamos a 23 grados", "Guardado en la base de datos Estamos a 23 grados", "Guardado en la base de datos Estamos a 23 grados", "Guardado en la base de datos Estamos a 23 grados", "Guardado en la base de datos Estamos a 23 grados"))
 
-    //println(res)
-
-
-    }
+  }
 
 
 
